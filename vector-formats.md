@@ -12,6 +12,10 @@
 - Attribute name limit (10 characters) and no native support for UTF-8
 - No topology or advanced data model
 
+**Performance:**
+- **File size:** Moderate (separate files)  
+- **Speed:** Good for small datasets, slower on very large datasets (no modern indexing)
+
 **Best For:** Legacy projects and maximum interoperability, but not recommended for new development.
 
 ---
@@ -28,6 +32,10 @@
 - No built-in spatial indexing → slower for very large datasets
 - Limited attribute storage and data types
 - Precision issues for very detailed geometries
+
+**Performance:**
+- **File size:** Larger than binary (text-based)  
+- **Speed:** Fast for small datasets, can lag with very large datasets due to lack of indexing
 
 **Best For:** Web mapping, lightweight spatial data sharing, APIs.
 
@@ -46,6 +54,10 @@
 - Not as ubiquitous as Shapefile (older software may not support it well)
 - Editing in parallel (multiple users) is tricky compared to databases
 
+**Performance:**
+- **File size:** Efficient (binary SQLite)  
+- **Speed:** High performance due to indexing and database optimization
+
 **Best For:** Modern offline GIS projects, mobile apps, multi-layer portable GIS datasets.
 
 ---
@@ -62,6 +74,10 @@
 - Binary format (not human-readable like GeoJSON)
 - Limited tooling compared to Shapefile and GeoPackage
 
+**Performance:**
+- **File size:** Small (binary + compression)  
+- **Speed:** Excellent (built-in indexing and streaming support)
+
 **Best For:** Web/cloud mapping with very large vector datasets and fast queries.
 
 ---
@@ -77,6 +93,10 @@
 - Proprietary ESRI format (not fully open)
 - Some features only fully supported in ArcGIS
 - Complex structure (folder with multiple files)
+
+**Performance:**
+- **File size:** Compact for large datasets  
+- **Speed:** Very high performance in ESRI software, good in others
 
 **Best For:** ESRI-based enterprise workflows where performance and advanced GIS capabilities are required.
 
@@ -95,6 +115,10 @@
 - No inherent spatial indexing
 - Slower to parse compared to binary formats (WKB)
 
+**Performance:**
+- **File size:** Large for big datasets (text overhead)  
+- **Speed:** Slower parsing vs. binary (WKB)
+
 **Best For:** Geometry exchange in text-based systems, debugging spatial data, database geometry fields.
 
 ---
@@ -111,18 +135,48 @@
 - Purely geometric (no attributes, no styling)
 - Requires software to interpret (less transparent than WKT)
 
+**Performance:**
+- **File size:** Smaller than WKT (binary)  
+- **Speed:** Faster than WKT, excellent for storage and transport
+
 **Best For:** Internal database storage, high-performance spatial data exchange, APIs requiring binary payloads.
 
 ---
 
 ## Summary Table
 
-| Format          | File Type | Max Size  | Human Readable | Multi-Layer | Indexing | Web-Friendly | Open Standard |
-|-----------------|-----------|-----------|----------------|-------------|----------|---------------|----------------|
-| **Shapefile**   | Multiple  | 2 GB      | Partial (DBF)  | No          | Basic    | No            | Partially      |
-| **GeoJSON**     | Single    | ~GBs      | Yes (JSON)     | No          | No       | Yes           | Yes            |
-| **GeoPackage**  | Single    | TBs       | No (SQLite DB) | Yes         | Yes      | Moderate      | Yes            |
-| **FlatGeobuf**  | Single    | TBs       | No (Binary)    | Yes         | Yes      | Yes           | Yes            |
-| **File GDB**    | Folder    | TBs       | No             | Yes         | Yes      | No            | No             |
-| **WKT**         | Text      | Depends   | Yes            | No          | No       | Limited       | Yes            |
-| **WKB**         | Binary    | Depends   | No             | No          | No       | Limited       | Yes            |
+| Format          | File Type | Max Size  | Human Readable | Multi-Layer | Indexing | Web-Friendly | Open Standard | Performance |
+|-----------------|-----------|-----------|----------------|-------------|----------|---------------|----------------|--------------|
+| **Shapefile**   | Multiple  | 2 GB      | Partial (DBF)  | No          | Basic    | No            | Partially      | Moderate     |
+| **GeoJSON**     | Single    | ~GBs      | Yes (JSON)     | No          | No       | Yes           | Yes            | Good small, slow large |
+| **GeoPackage**  | Single    | TBs       | No (SQLite DB) | Yes         | Yes      | Moderate      | Yes            | High         |
+| **FlatGeobuf**  | Single    | TBs       | No (Binary)    | Yes         | Yes      | Yes           | Yes            | Very High    |
+| **File GDB**    | Folder    | TBs       | No             | Yes         | Yes      | No            | No             | High (ESRI)  |
+| **WKT**         | Text      | Depends   | Yes            | No          | No       | Limited       | Yes            | Slow         |
+| **WKB**         | Binary    | Depends   | No             | No          | No       | Limited       | Yes            | Fast         |
+
+---
+
+## Recommended Usage by Scenario
+
+### **Web Applications**
+- **Best:** GeoJSON (for small/medium data), FlatGeobuf (for large datasets, streaming)
+- **Alternative:** GeoPackage for downloadable data packages
+
+### **Enterprise GIS**
+- **Best:** File Geodatabase (for ArcGIS users), GeoPackage (for open standard approach)
+- **Alternative:** Shapefile (legacy support)
+
+### **Open Data Portals**
+- **Best:** GeoJSON (easy access, human-readable), GeoPackage (single file, robust)
+- **Alternative:** Shapefile for legacy support, FlatGeobuf for large datasets
+
+### **Mobile & Offline GIS**
+- **Best:** GeoPackage (all-in-one database)
+- **Alternative:** Shapefile (if legacy support required)
+
+### **Databases & APIs**
+- **Best:** WKT (simple debugging, text-based exchange), WKB (high-performance binary storage)
+- **Alternative:** GeoJSON for JSON-based REST APIs
+
+---
