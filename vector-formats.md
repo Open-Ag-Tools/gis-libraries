@@ -82,12 +82,47 @@
 
 ---
 
+## 6. Well-Known Text (WKT)
+**Pros:**
+- Simple text representation of geometries (e.g., `POINT (30 10)`, `POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))`)
+- Human-readable and easy to embed in databases or text files
+- Widely supported across GIS and databases (PostGIS, Oracle Spatial, etc.)
+- Easy to generate and parse programmatically
+
+**Cons:**
+- Purely geometric (no attribute schema or styling information)
+- Larger file sizes than binary for big datasets
+- No inherent spatial indexing
+- Slower to parse compared to binary formats (WKB)
+
+**Best For:** Geometry exchange in text-based systems, debugging spatial data, database geometry fields.
+
+---
+
+## 7. Well-Known Binary (WKB)
+**Pros:**
+- Compact binary representation of geometries
+- Faster to parse and store compared to WKT
+- Standardized (OGC) and widely supported by spatial databases (e.g., PostGIS)
+- Efficient for storage and transmission
+
+**Cons:**
+- Not human-readable
+- Purely geometric (no attributes, no styling)
+- Requires software to interpret (less transparent than WKT)
+
+**Best For:** Internal database storage, high-performance spatial data exchange, APIs requiring binary payloads.
+
+---
+
 ## Summary Table
 
-| Format        | File Type | Max Size  | Human Readable | Multi-Layer | Indexing | Web-Friendly | Open Standard |
-|---------------|-----------|-----------|----------------|-------------|----------|---------------|----------------|
-| **Shapefile** | Multiple  | 2 GB      | Partial (DBF)  | No          | Basic    | No            | Partially      |
-| **GeoJSON**   | Single    | ~GBs      | Yes (JSON)     | No          | No       | Yes           | Yes            |
-| **GeoPackage**| Single    | TBs       | No (SQLite DB) | Yes         | Yes      | Moderate      | Yes            |
-| **FlatGeobuf**| Single    | TBs       | No (Binary)    | Yes         | Yes      | Yes           | Yes            |
-| **File GDB**  | Folder    | TBs       | No             | Yes         | Yes      | No            | No             |
+| Format          | File Type | Max Size  | Human Readable | Multi-Layer | Indexing | Web-Friendly | Open Standard |
+|-----------------|-----------|-----------|----------------|-------------|----------|---------------|----------------|
+| **Shapefile**   | Multiple  | 2 GB      | Partial (DBF)  | No          | Basic    | No            | Partially      |
+| **GeoJSON**     | Single    | ~GBs      | Yes (JSON)     | No          | No       | Yes           | Yes            |
+| **GeoPackage**  | Single    | TBs       | No (SQLite DB) | Yes         | Yes      | Moderate      | Yes            |
+| **FlatGeobuf**  | Single    | TBs       | No (Binary)    | Yes         | Yes      | Yes           | Yes            |
+| **File GDB**    | Folder    | TBs       | No             | Yes         | Yes      | No            | No             |
+| **WKT**         | Text      | Depends   | Yes            | No          | No       | Limited       | Yes            |
+| **WKB**         | Binary    | Depends   | No             | No          | No       | Limited       | Yes            |
